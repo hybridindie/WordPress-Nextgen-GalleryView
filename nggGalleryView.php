@@ -17,9 +17,9 @@ include "nggGalleryViewSharedFunctions.php";
 class GalleryView {
   
   function admin_menu() {  
-    add_menu_page('GalleryView Defaults', 'GalleryView', 'read', plugin_basename( dirname(__FILE__)), array($this, 'general_page')); // add_options_page
-    add_submenu_page( plugin_basename( dirname(__FILE__)), 'GalleryView Defaults', 'GalleryView Defaults', 'read', plugin_basename( dirname(__FILE__)), array($this, 'general_page'));
-    add_submenu_page( plugin_basename( dirname(__FILE__)), 'Option Generator', 'Options Generator', 'read', 'specific_galleryview', array($this, 'specific_page'));
+    add_menu_page('GalleryView', 'GalleryView', 'read', plugin_basename( dirname(__FILE__)), array($this, 'general_page')); // add_options_page
+    add_submenu_page( plugin_basename( dirname(__FILE__)), 'Overview', 'Overview', 'read', plugin_basename( dirname(__FILE__)), array($this, 'general_page'));
+    add_submenu_page( plugin_basename( dirname(__FILE__)), 'Option Generator', 'Shortcode Generator', 'read', 'specific_galleryview', array($this, 'specific_page'));
   } 
   
   

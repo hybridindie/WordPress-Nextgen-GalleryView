@@ -33,10 +33,6 @@
 //#################################################################
 
 
-
-
-
-
 function ngg_galleryview_scripts() {
 
    	wp_enqueue_script('jquery');
@@ -73,13 +69,6 @@ function ngg_galleryview_scripts() {
 	add_action('wp_enqueue_scripts', 'ngg_galleryview_styles');
 	add_action('admin_print_styles', 'ngg_galleryview_styles');
 	
-	
-	
-
-	
-	
-    
-
 
 function nggGalleryViewAlign($align, $margin, $who="") {
     switch ($align) {
@@ -178,7 +167,7 @@ function nggGalleryViewShow($info, $pictures = null) {
   // Gather pictures and GalleryView Gallery
   $out .= '<script type="text/javascript">
             jQuery(document).ready(function($) {
-            $(\'#myGallery_'.$galleryID.'\').galleryView({ '; // Leave a blank space in case there is no last comma to be removed later
+            jQuery(\'#myGallery_'.$galleryID.'\').galleryView({ '; // Leave a blank space in case there is no last comma to be removed later
               
   $out .= " show_panels: " . ($showpanels?'true':'false') . ",";
   $out .= " show_captions: " . ($showcaptions?'true':'false') . ",";
