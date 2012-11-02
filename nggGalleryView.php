@@ -41,7 +41,7 @@ class GalleryView {
     $data_ngs['fadePanels'] = (bool)   $_REQUEST['fadePanels'];
     
     // show_captions	boolean	false	Determines whether or not frame captions are displayed
-    $data_ngs['showCaptions'] = (bool)   $_REQUEST['showCaptions'];
+    $data_ngs['showCaptions'] = (bool)  $_REQUEST['showCaptions'];
     // overlay_position	‘top’ | ‘bottom’	‘bottom’	Position of overlay within panel
     $data_ngs['overlayPosition'] = (string)    $_REQUEST['overlayPosition'];
     // overlay_opacity	float 0.0 – 1.0	0.6	Opacity of panel overlay background
@@ -72,7 +72,7 @@ class GalleryView {
   function specific_page() {
   	global $data_ngs, $wpdb;
 
-    if (isset($_REQUEST["enviar"]))
+    if ($_REQUEST["enviar"])
       $this->save_request();
   
     $code  = "[galleryview id=yyy";
@@ -157,11 +157,11 @@ class GalleryView {
 
     $msg = "";
         
-    if (isset($_REQUEST["enviar"]) == "Back to Default") {
+    if ($_REQUEST["enviar"] == "Back to Default") {
       $data_ngs = $data_ngs_default;
       update_option('dataNextGenGalleryView', $data_ngs);
       $msg = "Data saved successfully.";
-    } elseif (isset($_REQUEST["enviar"])) {
+    } elseif ($_REQUEST["enviar"]) {
       $this->save_request();
       
       update_option('dataNextGenGalleryView', $data_ngs);
@@ -188,12 +188,7 @@ class GalleryView {
                 <input type="submit" name="enviar" value="Back to Default">
               </div>
               
-            <hr style="width:90%; border:1px solid #DFDFDF;">
-            <br><br><b>Write on your post</b> (You must replace 'yyy' with your Gallery Id)<br>
-
-            <textarea style="width:700px; height:60px;"><?php echo $code; ?></textarea>            
-          </fieldset>
-        </div>  
+              </div>  
         
         <?php $this->example_show($code); ?>
       </form>
