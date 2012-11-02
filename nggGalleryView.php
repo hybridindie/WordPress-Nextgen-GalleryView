@@ -173,6 +173,9 @@ class GalleryView {
     ?>    
   	<div class="wrap">
       <h2>NextGen GalleryView</h2>    
+      
+      <p>Note: You need NextGenGallery installed and running to use this plugin.</p>
+      
       <form method="post">      
         <div>   
           <fieldset class="options" style="padding:20px; margin-top:20px;">
