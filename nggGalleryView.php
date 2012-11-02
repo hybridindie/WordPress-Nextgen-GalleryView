@@ -73,6 +73,8 @@ class GalleryView {
   	global $data_ngs, $wpdb;
 
     if ($_REQUEST["enviar"])
+    
+    
       $this->save_request();
   
     $code  = "[galleryview id=yyy";
@@ -215,7 +217,7 @@ class GalleryView {
     ?>     
     <div>
       <fieldset class="options" style="padding:20px; margin-top:20px; margin-bottom:20px;">
-        <legend> Example </legend>
+        <legend> <h3>Example</h3> </legend>
         
         This is how your gallery will look like with the options above (after you <b>save</b> them). <br/><br/>
 
