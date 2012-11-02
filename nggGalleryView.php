@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: NextGEN JavaScript GalleryView
-Plugin URI: http://hybridindie.com/
+Plugin Name: WordPress NextGen GalleryView
+Plugin URI: https://github.com/bhubbard/wordpress-nextgen-galleryview
 Description: jQuery JavaScript Gallery plugin extending NextGen Gallery's slideshow abilities without breakage. Uses GalleryView - jQuery Content Gallery Plugin by Jack Anderson (http://www.spaceforaname.com/galleryview/).
-Author: John Brien
-Author URI: http://hybridindie.com/
-Version: 0.3                         
+Author: John Brien, Brandon Hubbard
+Author URI: http://blog.hybridindie.com/
+Version: 0.9                         
 */ 
 
 //#################################################################
@@ -15,58 +15,11 @@ Version: 0.3
 include "nggGalleryViewSharedFunctions.php";
   
 class GalleryView {
-    
-  function nggGalleryViewFindStringBetween($text, $begin, $end) {
-    if ( ($posBegin = stripos($text, $begin         )) === false) return Array($text, "");
-    if ( ($posEnd   = stripos($text, $end, $posBegin)) === false) return Array($text, "");
-    
-    $textBegin  = substr($text, 0, $posBegin);
-    $textMiddle = substr($text, $posBegin, $posEnd - $posBegin + strlen($end) );
-    $textEnd    = substr($text, $posEnd + strlen($end) , strlen($text));
-    
-    return Array($textBegin, $textMiddle, $textEnd);
-  }
-
-  function nggGalleryViewReplace($content) {
-  	global $wpdb, $data_ngs;
-    //print_r($content);
-    list($begin, $middle, $end) = $this->nggGalleryViewFindStringBetween($content, "[galleryview", "]");  
-    
-    if ($begin == $content) return $content;	
-
-    // New Way [galleryview=id:; width:; height:; timed:; delay:; transition:; arrows:; info:; carousel:; text:; open:; links:;]
-    $middleValues = substr($middle, 0, -1); // Remove last brackets
-    $middleValues = explode("=", $middleValues);
-    $middleValues = explode(";", $middleValues[1]);
-
-    $final = Array();
-    
-    foreach($middleValues as $value) {
-      list($key, $value) = explode(":", $value);
-      
-      if (trim($key) != "")
-        $final[trim(strtolower($key))] = trim($value);
-    }
-    //print_r($final);
-    $info = $this->get_values($final);
-    
-                              $info["galleryID"] = $wpdb->get_var("SELECT gid FROM $wpdb->nggallery WHERE gid  = '".$info["galleryID"]."' ");
-    if (! $info["galleryID"]) $info["galleryID"] = $wpdb->get_var("SELECT gid FROM $wpdb->nggallery WHERE name = '".$info["galleryID"]."' ");
-    if (! $info["galleryID"]) return $begin . $middle . $end;
-
-    if (  $info["galleryID"]) {
-      $middle = nggGalleryViewShow($info);
-    }
-    
-  	return $this->nggGalleryViewReplace($begin . $middle . $end); // More than one gallery per post
-  	//return nggGalleryViewShow($middle);
-  }
- 
   
   function admin_menu() {  
-    add_menu_page('GalleryView Defaults', 'GalleryView', 8, plugin_basename( dirname(__FILE__)), array($this, 'general_page')); // add_options_page
-    add_submenu_page( plugin_basename( dirname(__FILE__)), 'GalleryView Defaults', 'GalleryView Defaults', 8, plugin_basename( dirname(__FILE__)), array($this, 'general_page'));
-    add_submenu_page( plugin_basename( dirname(__FILE__)), 'Option Generator', 'Options Generator', 8, 'specific_galleryview', array($this, 'specific_page'));
+    add_menu_page('GalleryView Defaults', 'GalleryView', 'read', plugin_basename( dirname(__FILE__)), array($this, 'general_page')); // add_options_page
+    add_submenu_page( plugin_basename( dirname(__FILE__)), 'GalleryView Defaults', 'GalleryView Defaults', 'read', plugin_basename( dirname(__FILE__)), array($this, 'general_page'));
+    add_submenu_page( plugin_basename( dirname(__FILE__)), 'Option Generator', 'Options Generator', 'read', 'specific_galleryview', array($this, 'specific_page'));
   } 
   
   
@@ -115,88 +68,52 @@ class GalleryView {
     $data_ngs['pauseOnHover'] = (bool)   $_REQUEST['pauseOnHover'];
     $data_ngs['startFrame'] = (int)   $_REQUEST['startFrame'];  
   }
-
-  function get_values($final) {
-    global $data_ngs;
-
-    $info = array();      
-    $info["galleryID"]         = (int)    ( (array_key_exists("id" , $final))? $final["id"] :$data_ngs["id"] );
-    
-    $info["showPanels"]  = (bool)   ( (array_key_exists("showpanels"  , $final))?($final["showpanels"]=='false'?0:1):$data_ngs["showPanels"] );
-    $info["panelWidth"] = (int)    ( (array_key_exists("panelwidth", $final))? $final["panelwidth"]  :$data_ngs["panelWidth"] );
-    $info["panelHeight"] = (int)    ( (array_key_exists("panelheight", $final))? $final["panelheight"] :$data_ngs["panelHeight"] );
-    $info["panelScale"] = (string) ( (array_key_exists("panelscale", $final))? $final["panelscale"] :$data_ngs["panelScale"] );
-    
-    $info["transitionSpeed"]   = (int)    ( (array_key_exists("transitionspeed", $final))? $final["transitionspeed"] :$data_ngs["transitionSpeed"] );
-    $info["transitionInterval"]= (int)    ( (array_key_exists("transitioninterval", $final))? $final["transitioninterval"] :$data_ngs["transitionInterval"] );
-    $info["fadePanels"] = (bool)   ( (array_key_exists("fadepanels" , $final))?($final["fadepanels"]  =='false'?0:1):$data_ngs["fadePanels"] );
-    
-    $info["showCaptions"] = (bool)   ( (array_key_exists("showcaptions"     , $final))?($final["showcaptions"]=='false'?0:1):$data_ngs["showCaptions"] );
-    $info["overlayPosition"]   = (string) ( (array_key_exists("overlayposition", $final))? $final["overlayposition"] :$data_ngs["overlayPosition"] );
-    $info["overlayOpacity"]    = (float)    ( (array_key_exists("overlayopacity", $final))? $final["overlayopacity"] :$data_ngs["overlayOpacity"] );
-    
-    $info["showFilmstrip"]  = (bool)   ( (array_key_exists("showfilmstrip"  , $final))?($final["showfilmstrip"]=='false'?0:1):$data_ngs["showFilmstrip"] );    
-    $info["filmstripPosition"] = (string) ( (array_key_exists("filmstripposition", $final))? $final["filmstripposition"] :$data_ngs["filmstripPosition"] );
-    $info["pointerSize"]       = (int)    ( (array_key_exists("pointersize", $final))? $final["pointersize"] :$data_ngs["pointerSize"] );
-    $info["frameWidth"]    = (int)    ( (array_key_exists("framewidth", $final))? $final["framewidth"]  :$data_ngs["frameWidth"] );
-    $info["frameHeight"]   = (int)    ( (array_key_exists("frameheight", $final))? $final["frameheight"] :$data_ngs["frameHeight"] );
-    $info["frameScale"] = (string) ( (array_key_exists("framescale", $final))? $final["framescale"] :$data_ngs["frameScale"] );
-    $info["frameGap"]       = (int)    ( (array_key_exists("framegap", $final))? $final["framegap"] :$data_ngs["frameGap"] );
-    $info["frameOpacity"]    = (float)    ( (array_key_exists("frameopacity", $final))? $final["frameopacity"] :$data_ngs["frameOpacity"] );
-    
-    $info["easingValue"] = (string) ( (array_key_exists("easingvalue", $final))? $final["easingvalue"] :$data_ngs["easingValue"] );
-    $info["navTheme"] = (string) ( (array_key_exists("navtheme", $final))? $final["navtheme"] :$data_ngs["navTheme"] );
-    
-    $info["pauseOnHover"]  = (bool)   ( (array_key_exists("pauseonhover"  , $final))?($final["pauseonhover"]=='false'?0:1):$data_ngs["pauseOnHover"] );
-    $info["startFrame"]       = (int)    ( (array_key_exists("startframe", $final))? $final["startframe"] :$data_ngs["startFrame"] );
-    
-    return $info;
-  }  
   
   function specific_page() {
   	global $data_ngs, $wpdb;
 
-    if ($_REQUEST["enviar"])
+    if (isset($_REQUEST["enviar"]))
       $this->save_request();
   
-    $code  = "[galleryview=id: yyy;";
-    $code .= " showPanels: " . ($data_ngs['showPanels']    ?'true':'false') . ";";
-    $code .= " showCaptions: " . ($data_ngs['showCaptions'] ?'true':'false') . ";";
-    $code .= " showFilmstrip: " . ($data_ngs['showFilmstrip'] ?'true':'false') . ";";
+    $code  = "[galleryview id=yyy";
+    $code .= " showPanels=" . ($data_ngs['showPanels']    ?'true':'false');
+    $code .= " showCaptions=" . ($data_ngs['showCaptions'] ?'true':'false');
+    $code .= " showFilmstrip=" . ($data_ngs['showFilmstrip'] ?'true':'false');
 
     if ($data_ngs['showPanels'] ) {
-      $code .= " panelWidth: " . $data_ngs['panelWidth'] . ";";
-      $code .= " panelHeight: " . $data_ngs['panelHeight'] . ";";
-      $code .= " panelScale: " . $data_ngs['panelScale'] . ";";
-      $code .= " transitionSpeed: " . $data_ngs['transitionSpeed'] . ";";
-      $code .= " transitionInterval: " . $data_ngs['transitionInterval'] . ";";
-      $code .= " fadePanels: " . ($data_ngs['fadePanels'] ?'true':'false') . ";";
+      $code .= " panelWidth=" . $data_ngs['panelWidth'];
+      $code .= " panelHeight=" . $data_ngs['panelHeight'];
+      $code .= " panelScale=" . $data_ngs['panelScale'];
+      $code .= " transitionSpeed=" . $data_ngs['transitionSpeed'];
+      $code .= " transitionInterval=" . $data_ngs['transitionInterval'];
+      $code .= " fadePanels=" . ($data_ngs['fadePanels'] ?'true':'false');
     }
     if ($data_ngs['showCaptions']) {
-      $code .= " overlayPosition: " . $data_ngs['overlayPosition'] . ";";
-      $code .= " overlayOpacity: " . $data_ngs['overlayOpacity'] . ";";
+      $code .= " overlayPosition=" . $data_ngs['overlayPosition'];
+      $code .= " overlayOpacity=" . $data_ngs['overlayOpacity'];
     }
     if ($data_ngs['showFilmstrip']) {
-      $code .= " frameWidth: " . $data_ngs['frameWidth'] . ";";
-      $code .= " frameHeight: " . $data_ngs['frameHeight'] . ";";
-      $code .= " filmstripPosition: " . $data_ngs['filmstripPosition'] . ";";
-      $code .= " pointerSize: " . $data_ngs['pointerSize'] . ";";
-      $code .= " frameScale: " . $data_ngs['frameScale'] . ";";
-      $code .= " frameGap: " . $data_ngs['frameGap'] . ";";
-      $code .= " frameOpacity: " . $data_ngs['frameOpacity'] . ";";
-      $code .= " easingValue: " . $data_ngs['easingValue'] . ";";
+      $code .= " frameWidth=" . $data_ngs['frameWidth'];
+      $code .= " frameHeight=" . $data_ngs['frameHeight'];
+      $code .= " filmstripPosition=" . $data_ngs['filmstripPosition'];
+      $code .= " pointerSize=" . $data_ngs['pointerSize'];
+      $code .= " frameScale=" . $data_ngs['frameScale'];
+      $code .= " frameGap=" . $data_ngs['frameGap'];
+      $code .= " frameOpacity=" . $data_ngs['frameOpacity'];
+      $code .= " easingValue=" . $data_ngs['easingValue'];
     }
-    $code .= " navTheme: " . $data_ngs['navTheme'] . ";";
-    $code .= " startFrame: " . $data_ngs['startFrame'] . ";";
-    $code .= " pauseOnHover: " . ($data_ngs['pauseOnHover'] ?'true':'false') . ";";
+    $code .= " navTheme=" . $data_ngs['navTheme'];
+    $code .= " startFrame=" . $data_ngs['startFrame'];
+    $code .= " pauseOnHover=" . ($data_ngs['pauseOnHover'] ?'true':'false');
             
     $code .= "]";
       
-    $code_2 = "<?php \n  \$content = \"" . $code . "\"; \n  galleryview_show(\$content); \n?>";
+    $code_2 = "<?php \n  echo  do_shortcode(\"" . $code . "\"); \n?>";
       
     ?>
   	<div class="wrap">
       <h2>NextGen GalleryView</h2>
+
       <form method="post">      
         <div>   
           <fieldset class="options" style="padding:20px; margin-top:20px;">
@@ -205,7 +122,7 @@ class GalleryView {
               Allows a gallery to have a behavior other that the General one. 
               <br/><br/>
 
-              <?php $this->opcoes_tela_antes(); ?>
+              <?php $this->show_admin_layouts(); ?>
 
               <div class="submit"> 
                 <input type="submit" name="enviar" value="Generate Code">
@@ -225,7 +142,7 @@ class GalleryView {
             
             <hr style="width:90%; border:1px solid #DFDFDF;">
             
-            <br/>If you remove, for example, "width:300, " the General option will be used on that item.
+            <br/>If you remove, for example, "width=300, " the General option will be used on that item.
           </fieldset>
         </div>  
         
@@ -239,11 +156,11 @@ class GalleryView {
 
     $msg = "";
         
-    if ($_REQUEST["enviar"] == "Back to Default") {
+    if (isset($_REQUEST["enviar"]) == "Back to Default") {
       $data_ngs = $data_ngs_default;
       update_option('dataNextGenGalleryView', $data_ngs);
       $msg = "Data saved successfully.";
-    } elseif ($_REQUEST["enviar"]) {
+    } elseif (isset($_REQUEST["enviar"])) {
       $this->save_request();
       
       update_option('dataNextGenGalleryView', $data_ngs);
@@ -252,7 +169,7 @@ class GalleryView {
   	
   	if ($msg != '') echo '<div id="message"class="updated fade"><p>' . $msg . '</p></div>';
     
-    $code = "[galleryview=id:yyy;]";    
+    $code = "[galleryview id=yyy]";    
     ?>    
   	<div class="wrap">
       <h2>NextGen GalleryView</h2>    
@@ -260,7 +177,7 @@ class GalleryView {
         <div>   
           <fieldset class="options" style="padding:20px; margin-top:20px;">
             <legend> Default Options </legend>      
-              <?php $this->opcoes_tela_antes(); ?>      
+              <?php $this->show_admin_layouts(); ?>      
 
               <div class="submit" style="clear:both;"> 
                 <input type="submit" name="enviar" value="Save">
@@ -283,7 +200,7 @@ class GalleryView {
   function example_show($code) {
     global $_REQUEST, $data_ngs, $wpdb; 
     
-    $gal_id = $_REQUEST['gal_id']; 
+    $gal_id = isset($_REQUEST['gal_id']); 
 
     $gallerylist = $wpdb->get_results("SELECT * FROM $wpdb->nggallery ORDER BY gid ASC");
 
@@ -295,7 +212,7 @@ class GalleryView {
       }
       
     if ($gal_id)
-      $real_deal = $this->nggGalleryViewReplace( str_replace("yyy", $gal_id, $code) );
+      $real_deal = do_shortcode( str_replace("yyy", $gal_id, $code) );
     ?>     
     <div>
       <fieldset class="options" style="padding:20px; margin-top:20px; margin-bottom:20px;">
@@ -320,7 +237,7 @@ class GalleryView {
     </div>
   <?php } 
   
-  function opcoes_tela_antes() { 
+  function show_admin_layouts() { 
     global $data_ngs; ?>
           <div style="clear:both; padding-top:10px;">
             <div style="width:120px; float:left;"> Show Panel </div>
@@ -514,25 +431,25 @@ class GalleryView {
   <?php }
 }
 
-function galleryview_show($content) {
-  global $galleryview;
-  
-  echo $galleryview->nggGalleryViewReplace($content);
-}
-
 function init_jquery() {
   wp_enqueue_script('jquery');
+  wp_enqueue_script('jquery-timers');
+   wp_enqueue_script('jquery-easing');
+   wp_enqueue_script('jquery-gallerview');
 }
 
 $galleryview = new GalleryView();
 
 add_action('admin_menu' , array($galleryview, 'admin_menu'));
-add_filter('the_content', array($galleryview, 'nggGalleryViewReplace'));
-add_filter('the_excerpt', array($galleryview, 'nggGalleryViewReplace'));
+add_shortcode('galleryview', 'nggGalleryViewShow');
 add_action('init', 'init_jquery');
-add_action('wp_head'   , 'nggGalleryViewHead');
+// add_action('wp_head'   , 'nggGalleryViewHead');
 
-if ($_REQUEST["page"] == "specific_galleryview") add_action('admin_head', 'nggGalleryViewHeadAdmin');
-//if ($_REQUEST["page"] == "soon_galleryview") add_action('admin_head', 'nggGalleryViewHeadAdmin');
-if ($_REQUEST["page"] == plugin_basename( dirname(__FILE__))) add_action('admin_head', 'nggGalleryViewHeadAdmin');
+if (isset($_REQUEST["page"]) == "specific_galleryview") add_action('admin_head', 'nggGalleryViewHeadAdmin');
+
+if (isset($_REQUEST["page"]) == plugin_basename( dirname(__FILE__))) add_action('admin_head', 'nggGalleryViewHeadAdmin');
+
+
+
+
 ?>
