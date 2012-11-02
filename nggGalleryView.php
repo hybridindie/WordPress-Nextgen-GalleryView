@@ -231,7 +231,11 @@ class GalleryView {
         </div>
         <br/>
         <div class="slides">
-          <?php echo $real_deal; ?>
+          <?php
+          
+          if (!empty($real_deal)) {
+    echo $real_deal;
+}           ?>
         </div>
       </fieldset>
     </div>
