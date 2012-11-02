@@ -112,12 +112,13 @@ class GalleryView {
       
     ?>
   	<div class="wrap">
-      <h2>NextGen GalleryView</h2>
-
+      <h2 style="border-bottom: 1px solid #ddd;">NextGen GalleryView: Shortcode Generator</h2>
+      
+      <br />
       <form method="post">      
         <div>   
           <fieldset class="options" style="padding:20px; margin-top:20px;">
-            <legend> Specific Options </legend>
+            <legend> <h3>Specific Options</h3> </legend>
               
               Allows a gallery to have a behavior other that the General one. 
               <br/><br/>
@@ -172,14 +173,14 @@ class GalleryView {
     $code = "[galleryview id=yyy]";    
     ?>    
   	<div class="wrap">
-      <h2>NextGen GalleryView</h2>    
+      <h2 style="border-bottom: 1px solid #ddd;">NextGen GalleryView</h2>    
       
       <p>Note: You need NextGenGallery installed and running to use GalleryView.</p>
       
       <form method="post">      
         <div>   
           <fieldset class="options" style="padding:20px; margin-top:20px;">
-            <legend> Default Options </legend>      
+            <legend> <h3> Default Options </h3></legend>      
               <?php $this->show_admin_layouts(); ?>      
 
               <div class="submit" style="clear:both;"> 
@@ -414,7 +415,8 @@ class GalleryView {
 
           <div style="clear:both; padding-bottom:8px;"></div>
           <fieldset>
-            <legend> Advanced Options </legend>
+            <legend> <h3>Advanced Options</h3> </legend>
+            <br />
              <div style="width:120px; float:left;"> Theme </div>
               <div style="width:120px; float:left;"> 
                 <select name="navTheme">
@@ -432,7 +434,7 @@ class GalleryView {
             </div>
           </fieldset>
 
-          <div style="clear:both; padding-bottom:8px;"></div>  
+          
 
             <div class="submit"></div>          
   <?php }
