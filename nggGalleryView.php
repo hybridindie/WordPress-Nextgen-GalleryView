@@ -119,7 +119,7 @@ class GalleryView {
       <br />
       <form method="post">      
         <div>   
-          <fieldset class="options" style="padding:20px; margin-top:20px;">
+          <fieldset class="options" >
             <legend> <h3>Specific Options</h3> </legend>
               
               Allows a gallery to have a behavior other that the General one. 
@@ -177,16 +177,16 @@ class GalleryView {
   	<div class="wrap">
       <h2 style="border-bottom: 1px solid #ddd;">NextGen GalleryView</h2>    
       
-      <p>Note: You need NextGenGallery installed and running to use GalleryView.</p>
+      <p class="notice">Note: You need NextGenGallery installed and running to use GalleryView.</p>
       
       <form method="post">      
         <div>   
-          <fieldset class="options" style="padding:20px; margin-top:20px;">
-            <legend> <h3> Default Options </h3></legend>      
+          <fieldset class="options">
+           <h3> Default Options </h3>
               <?php $this->show_admin_layouts(); ?>      
 
               <div class="submit" style="clear:both;"> 
-                <input type="submit" name="enviar" value="Save">
+                <input type="submit" class="button-primary" name="enviar" value="Save">
                 <input type="submit" name="enviar" value="Back to Default">
               </div>
               
@@ -245,7 +245,7 @@ class GalleryView {
   function show_admin_layouts() { 
     global $data_ngs; ?>
           <div style="clear:both; padding-top:10px;">
-            <div style="width:120px; float:left;"> Show Panel </div>
+            <div style="width:120px; float:left;font-weight:bold;"> Show Panel </div>
             <div style="width:120px; float:left;"> <input type="checkbox" id="showPanels" name="showPanels" <?php echo ($data_ngs['showPanels']? "checked=\"checked\"": "") ?> onClick="if(this.checked){document.getElementById('panel_options').style.display='';} else{document.getElementById('panel_options').style.display='none';};" > </div>
           </div>
 
@@ -290,7 +290,7 @@ class GalleryView {
           </fieldset>
 
           <div style="clear:both; padding-top:10px;">
-            <div style="width:120px; float:left;"> Show Captions </div>
+            <div style="width:120px; float:left;font-weight:bold;"> Show Captions </div>
             <div style="width:120px; float:left;"> <input type="checkbox" id="showCaptions" name="showCaptions" <?php echo ($data_ngs['showCaptions']? "checked=\"checked\"": "") ?> onClick="if(this.checked){document.getElementById('caption_options').style.display='';} else{document.getElementById('caption_options').style.display='none';};" > </div>
           </div>
 
@@ -315,7 +315,7 @@ class GalleryView {
           </fieldset>
 
           <div style="clear:both; padding-top:10px;">
-            <div style="width:120px; float:left;"> Show Filmstrip </div>
+            <div style="width:120px; float:left;font-weight:bold;"> Show Filmstrip </div>
             <div style="width:120px; float:left;"> <input type="checkbox" id="showFilmstrip" name="showFilmstrip" <?php echo ($data_ngs['showFilmstrip']? "checked=\"checked\"": "") ?> onClick="if(this.checked){document.getElementById('filmstrip_options').style.display='';} else{document.getElementById('filmstrip_options').style.display='none';};" > </div>
           </div>
 
@@ -410,9 +410,11 @@ class GalleryView {
 
           </fieldset>
 
-          <div style="clear:both; padding-bottom:8px;"></div>
+          
+          <div style="clear:both; padding:10px;border-top:1px solid #ddd"></div>
+         
           <fieldset>
-            <legend> <h3>Advanced Options</h3> </legend>
+            <h3>Advanced Options</h3>
             <br />
              <div style="width:120px; float:left;"> Theme </div>
               <div style="width:120px; float:left;"> 
@@ -431,9 +433,10 @@ class GalleryView {
             </div>
           </fieldset>
 
-          
 
-            <div class="submit"></div>          
+
+            <div class="submit "></div>        
+            
   <?php }
 }
 
