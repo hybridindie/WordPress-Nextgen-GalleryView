@@ -33,7 +33,6 @@
 //#################################################################
 
 function nggGalleryViewHeadAdmin() { ?>
-  <!-- begin nextgen-js-galleryview admin scripts -->
     <style>    
       fieldset {
         border:1px solid #DFDFDF;
@@ -50,7 +49,11 @@ function nggGalleryViewHeadAdmin() { ?>
       }    
     </style> 
   <?php  
+
 }
+
+
+
 
 
 function ngg_galleryview_scripts() {
@@ -71,7 +74,9 @@ function ngg_galleryview_scripts() {
 
     }
   add_action('wp_enqueue_scripts', 'ngg_galleryview_scripts');
+  add_action( 'admin_enqueue_scripts', 'ngg_galleryview_scripts' );
   
+
   
 ################################################################################
 // Loading CSS
@@ -85,6 +90,13 @@ function ngg_galleryview_scripts() {
 	}
 	
 	add_action('wp_enqueue_scripts', 'ngg_galleryview_styles');
+	add_action('admin_print_styles', 'ngg_galleryview_styles');
+	
+	
+	
+
+	
+	
     
 
 

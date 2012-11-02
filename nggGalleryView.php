@@ -437,9 +437,6 @@ class GalleryView {
 
 function init_jquery() {
   wp_enqueue_script('jquery');
-  wp_enqueue_script('jquery-timers');
-   wp_enqueue_script('jquery-easing');
-   wp_enqueue_script('jquery-gallerview');
 }
 
 $galleryview = new GalleryView();
