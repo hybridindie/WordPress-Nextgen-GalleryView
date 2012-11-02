@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: WordPress NextGen GalleryView
-Plugin URI: https://github.com/bhubbard/wordpress-nextgen-galleryview
+Plugin URI: https://github.com/jbrien/WordPress-Nextgen-GalleryView
 Description: jQuery JavaScript Gallery plugin extending NextGen Gallery's slideshow abilities without breakage. Uses GalleryView - jQuery Content Gallery Plugin by Jack Anderson (http://www.spaceforaname.com/galleryview/).
 Author: John Brien, Brandon Hubbard
-Author URI: http://blog.hybridindie.com/
+Author URI: https://github.com/jbrien
 Version: 0.9                         
 */ 
 
