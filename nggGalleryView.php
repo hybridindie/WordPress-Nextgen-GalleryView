@@ -174,7 +174,7 @@ class GalleryView {
   	<div class="wrap">
       <h2>NextGen GalleryView</h2>    
       
-      <p>Note: You need NextGenGallery installed and running to use this plugin.</p>
+      <p>Note: You need NextGenGallery installed and running to use GalleryView.</p>
       
       <form method="post">      
         <div>   
@@ -447,11 +447,7 @@ $galleryview = new GalleryView();
 add_action('admin_menu' , array($galleryview, 'admin_menu'));
 add_shortcode('galleryview', 'nggGalleryViewShow');
 add_action('init', 'init_jquery');
-// add_action('wp_head'   , 'nggGalleryViewHead');
 
-if (isset($_REQUEST["page"]) == "specific_galleryview") add_action('admin_head', 'nggGalleryViewHeadAdmin');
-
-if (isset($_REQUEST["page"]) == plugin_basename( dirname(__FILE__))) add_action('admin_head', 'nggGalleryViewHeadAdmin');
 
 
 

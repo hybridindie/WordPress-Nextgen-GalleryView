@@ -32,25 +32,6 @@
 
 //#################################################################
 
-function nggGalleryViewHeadAdmin() { ?>
-    <style>    
-      fieldset {
-        border:1px solid #DFDFDF;
-        background:#fff;
-        -moz-border-radius-bottomleft:6px;
-        -moz-border-radius-bottomright:6px;
-        -moz-border-radius-topleft:6px;
-        -moz-border-radius-topright:6px;      
-      }
-      
-      legend {
-        font-weight:bold;
-        padding:0px 6px;
-      }    
-    </style> 
-  <?php  
-
-}
 
 
 
